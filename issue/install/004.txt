@@ -1,0 +1,36 @@
+Script started on 2025-08-20 11:38:50-04:00 [COMMAND="set -x && pip install -e '.[full,mcp]'" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
++ pip install -e '.[full,mcp]'
+Obtaining file:///home/phdyex/my-repos/claude-cygwin
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... done
+  Preparing editable metadata (pyproject.toml) ... done
+Requirement already satisfied: click>=8.0.0 in /usr/local/lib/python3.9/site-packages (from claude-shell-connector==1.0.0) (8.1.7)
+Requirement already satisfied: pydantic<2.0.0,>=1.10.0 in /usr/local/lib/python3.9/site-packages (from claude-shell-connector==1.0.0) (1.10.21)
+Requirement already satisfied: rich>=13.0.0 in /home/phdyex/.local/lib/python3.9/site-packages (from claude-shell-connector==1.0.0) (13.9.2)
+Requirement already satisfied: typing-extensions>=4.0.0 in /home/phdyex/.local/lib/python3.9/site-packages (from claude-shell-connector==1.0.0) (4.12.2)
+Collecting watchdog>=3.0.0 (from claude-shell-connector==1.0.0)
+  Downloading watchdog-6.0.0.tar.gz (131 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting psutil>=5.9.0 (from claude-shell-connector==1.0.0)
+  Downloading psutil-7.0.0.tar.gz (497 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... error
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build wheel did not run successfully.
+  │ exit code: 1
+  ╰─> [1 lines of output]
+      platform cygwin is not supported
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: subprocess-exited-with-error
+× Getting requirements to build wheel did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+note: This error originates from a subprocess, and is likely not a problem with pip.
+Script done on 2025-08-20 11:39:08-04:00 [COMMAND_EXIT_CODE="1"]
+
