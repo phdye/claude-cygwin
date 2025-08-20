@@ -1,0 +1,24 @@
+Script started on 2025-08-20 08:11:18-04:00 [COMMAND="set -x && diag/test_exe_extensions.sh" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
++ diag/test_exe_extensions.sh
+🔍 Testing realpath behavior with .exe extensions
+================================================
+1. Current python3 path:
+   which python3: /usr/bin/python3
+2. Real path resolution:
+   realpath result: /usr/bin/python3.9.exe
+3. Check if real path has .exe:
+   ✅ Real path includes .exe extension
+4. Check original symlink:
+lrwxrwxrwx 1 phdyex admin 25 Nov 28  2024 /usr/bin/python3 -> /etc/alternatives/python3
+5. Check real target:
+-rwxr-xr-x+ 1 phdyex None 9747 Apr 11 01:32 /usr/bin/python3.9.exe
+6. Same test for bash:
+   which bash: /usr/bin/bash
+   realpath bash: /usr/bin/bash
+   bash has .exe: NO
+7. Manual check for .exe versions:
+   /usr/bin/python3.exe exists: NO
+   /usr/bin/python3.9.exe exists: YES
+   /bin/bash.exe exists: YES
+Script done on 2025-08-20 08:11:18-04:00 [COMMAND_EXIT_CODE="0"]
+
