@@ -147,11 +147,44 @@ class ShellConnector:
         self.file_watcher = None
         self._start_time = None
         
+        # Detect shell type and set appropriate execution method
+        self._detect_shell_type()
+        
         self._update_status("ready", "Connector initialized")
         logger.info(f"Connector initialized with work_dir: {self.work_dir}")
         
         if not WATCHDOG_AVAILABLE:
             logger.warning("Watchdog not available, using polling file watcher")
+    
+    def _detect_shell_type(self):
+        """Detect shell type and set execution parameters."""
+        shell_name = self.config.shell_path.name.lower()
+        shell_path_str = str(self.config.shell_path).lower()
+        
+        # Set shell-specific parameters
+        if "alt-bash" in shell_name:
+            # alt-bash might have issues with -l (login shell)
+            self.shell_args = ["-c"]
+            self.shell_type = "alt-bash"
+        elif "bash" in shell_name:
+            # Regular bash - try without -l first for Cygwin compatibility
+            self.shell_args = ["-c"]
+            self.shell_type = "bash"
+        elif "sh" in shell_name:
+            self.shell_args = ["-c"]
+            self.shell_type = "sh"
+        elif "cmd" in shell_name:
+            self.shell_args = ["/c"]
+            self.shell_type = "cmd"
+        elif "powershell" in shell_name:
+            self.shell_args = ["-Command"]
+            self.shell_type = "powershell"
+        else:
+            # Default fallback
+            self.shell_args = ["-c"]
+            self.shell_type = "unknown"
+        
+        logger.info(f"Detected shell type: {self.shell_type}, args: {self.shell_args}")
     
     def start(self):
         """Start the connector."""
@@ -236,32 +269,88 @@ class ShellConnector:
         start_time = time.time()
         
         try:
-            # Prepare environment
-            env = {}
+            # Prepare environment with encoding fixes
+            env = os.environ.copy()
+            env.update({
+                "PYTHONIOENCODING": "utf-8",
+                "LC_ALL": "C.UTF-8",
+                "LANG": "C.UTF-8",
+            })
+            
             if "cygwin" in str(self.config.shell_path).lower():
                 env["CYGWIN"] = "nodosfilewarning"
             
             # Handle working directory for Cygwin
+            final_command = command
             if working_dir and "cygwin" in str(self.config.shell_path).lower():
                 if Path(working_dir).is_absolute() and ":" in working_dir:
                     # Convert Windows path to Cygwin path
                     drive = working_dir[0].lower()
                     path = working_dir[2:].replace("\\", "/")
                     cygwin_dir = f"/cygdrive/{drive}/{path}"
-                    command = f"cd '{cygwin_dir}' && {command}"
+                    final_command = f"cd '{cygwin_dir}' && {command}"
+            elif working_dir:
+                final_command = f"cd '{working_dir}' && {command}"
             
-            # Execute command
+            # Build command arguments based on shell type
+            cmd_args = [str(self.config.shell_path)] + self.shell_args + [final_command]
+            
+            logger.debug(f"Executing: {cmd_args}")
+            
+            # Execute command with improved settings
             process = subprocess.Popen(
-                [str(self.config.shell_path), "-l", "-c", command],
+                cmd_args,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 stdin=subprocess.PIPE,
-                env={**os.environ, **env} if env else None,
                 text=True,
-                encoding="utf-8"
+                encoding="utf-8",
+                env=env,
+                # Prevent shell from hanging on input
+                close_fds=True,
+                # Set process group for better cleanup
+                preexec_fn=os.setsid if hasattr(os, 'setsid') else None,
             )
             
-            stdout, stderr = process.communicate(timeout=timeout)
+            # Immediately close stdin to prevent hanging
+            if process.stdin:
+                process.stdin.close()
+            
+            try:
+                stdout, stderr = process.communicate(timeout=timeout)
+            except subprocess.TimeoutExpired:
+                # Force kill the process and its children
+                try:
+                    if hasattr(os, 'killpg'):
+                        os.killpg(os.getpgid(process.pid), 9)
+                    else:
+                        process.kill()
+                except:
+                    pass
+                
+                try:
+                    stdout, stderr = process.communicate(timeout=2)
+                except subprocess.TimeoutExpired:
+                    stdout, stderr = "", ""
+                
+                execution_time = time.time() - start_time
+                
+                result = CommandResult(
+                    success=False,
+                    stdout=stdout,
+                    stderr=stderr,
+                    exit_code=-1,
+                    command=command,
+                    execution_time=execution_time,
+                    command_id=command_id,
+                    working_dir=working_dir,
+                    error=f"Command timed out after {timeout} seconds",
+                )
+                
+                logger.error(f"Command {command_id} timed out")
+                self._update_status("ready", "Command timed out")
+                return result
+            
             execution_time = time.time() - start_time
             
             result = CommandResult(
@@ -284,26 +373,6 @@ class ShellConnector:
                 logger.warning(f"Command {command_id} failed")
                 self._update_status("ready", f"Command failed: exit code {result.exit_code}")
             
-            return result
-            
-        except subprocess.TimeoutExpired:
-            process.kill()
-            execution_time = time.time() - start_time
-            
-            result = CommandResult(
-                success=False,
-                stdout="",
-                stderr="",
-                exit_code=-1,
-                command=command,
-                execution_time=execution_time,
-                command_id=command_id,
-                working_dir=working_dir,
-                error=f"Command timed out after {timeout} seconds",
-            )
-            
-            logger.error(f"Command {command_id} timed out")
-            self._update_status("ready", "Command timed out")
             return result
             
         except Exception as e:
@@ -387,6 +456,8 @@ class ShellConnector:
             "timestamp": datetime.now().isoformat(),
             "work_dir": str(self.work_dir),
             "shell_path": str(self.config.shell_path),
+            "shell_type": getattr(self, 'shell_type', 'unknown'),
+            "shell_args": getattr(self, 'shell_args', []),
             "commands_executed": self._commands_executed,
             "uptime": uptime,
             "watchdog_available": WATCHDOG_AVAILABLE,

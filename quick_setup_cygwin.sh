@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Quick Cygwin setup that avoids pip hanging issues
-# This script sets up the connector without using "pip install -e ."
+# Quick Cygwin setup with timeout fix
+# This script sets up the connector and tests that commands don't timeout
 
-echo "🚀 Quick Cygwin Setup - No Pip Hanging"
-echo "======================================"
+echo "🚀 Quick Cygwin Setup - With Timeout Fix"
+echo "========================================"
 
 cd ~/my-repos/claude-cygwin
 
-# Set up environment to prevent encoding issues
+# Set up environment to prevent encoding and timeout issues
 export PYTHONIOENCODING=utf-8
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
@@ -18,34 +18,27 @@ export PIP_DISABLE_PIP_VERSION_CHECK=1
 
 echo "✅ Environment configured"
 
-# Install only essential packages with timeout
-echo "📦 Installing essential packages..."
+# Install only essential packages with timeout (quick check if already installed)
+echo "📦 Checking essential packages..."
 
-install_with_timeout() {
-    local package=$1
-    local timeout=60
-    
-    echo "Installing $package (timeout: ${timeout}s)..."
-    
-    timeout ${timeout}s pip install --no-cache-dir "$package" 2>/dev/null
-    local exit_code=$?
-    
-    if [ $exit_code -eq 0 ]; then
-        echo "✅ $package installed"
-        return 0
-    elif [ $exit_code -eq 124 ]; then
-        echo "⚠️  $package timed out"
-        return 1
-    else
-        echo "⚠️  $package failed (exit code: $exit_code)"
-        return 1
-    fi
+check_package() {
+    python -c "import $1" 2>/dev/null && echo "✅ $1 already available" || return 1
 }
 
-# Try to install essential packages
-install_with_timeout "click" 
-install_with_timeout "rich"
-install_with_timeout "pydantic"
+if ! check_package "click"; then
+    echo "Installing click..."
+    timeout 60s pip install --no-cache-dir click
+fi
+
+if ! check_package "rich"; then
+    echo "Installing rich..."
+    timeout 60s pip install --no-cache-dir rich
+fi
+
+if ! check_package "pydantic"; then
+    echo "Installing pydantic..."
+    timeout 60s pip install --no-cache-dir pydantic
+fi
 
 echo ""
 echo "📁 Setting up package manually (avoiding pip -e)..."
@@ -85,21 +78,22 @@ else
     exit 1
 fi
 
-# Create a simple launcher script
+# Create launcher script with timeout fix
 echo ""
-echo "🚀 Creating launcher script..."
+echo "🚀 Creating improved launcher script..."
 
 cat > claude-shell-cygwin << 'EOF'
 #!/usr/bin/env python3
-"""Quick Cygwin launcher for Claude Shell Connector."""
+"""Improved Cygwin launcher for Claude Shell Connector with timeout fix."""
 
 import sys
 import os
 from pathlib import Path
 
-# Environment setup
+# Environment setup for Cygwin
 os.environ["PYTHONIOENCODING"] = "utf-8"
 os.environ["LC_ALL"] = "C.UTF-8"
+os.environ["LANG"] = "C.UTF-8"
 os.environ["CYGWIN"] = "nodosfilewarning"
 
 # Add source to Python path
@@ -122,25 +116,20 @@ except ImportError as e:
     print("  export PYTHONPATH=$(pwd)/src:$PYTHONPATH")
     print("  python -c 'from claude_shell_connector import run_command'")
     sys.exit(1)
+except KeyboardInterrupt:
+    print("\n❌ Interrupted by user")
+    sys.exit(1)
+except Exception as e:
+    print(f"❌ Error: {e}")
+    sys.exit(1)
 EOF
 
 chmod +x claude-shell-cygwin
 echo "✅ Created executable launcher: claude-shell-cygwin"
 
-# Test the launcher
+# Test command execution with timeout fix
 echo ""
-echo "🧪 Testing launcher..."
-./claude-shell-cygwin exec "echo Quick setup test successful!" 2>/dev/null
-
-if [ $? -eq 0 ]; then
-    echo "✅ Launcher test passed"
-else
-    echo "⚠️  Launcher test had issues, but basic functionality should work"
-fi
-
-# Test command execution
-echo ""
-echo "🧪 Testing command execution..."
+echo "🧪 Testing command execution with timeout fix..."
 
 python -c "
 import sys
@@ -148,32 +137,63 @@ sys.path.insert(0, 'src')
 
 try:
     from claude_shell_connector import run_command
-    result = run_command('echo Quick Cygwin setup successful!', timeout=10)
+    
+    print('Testing quick command (should complete in <5 seconds)...')
+    result = run_command('echo Quick setup test - timeout fix applied!', timeout=10)
+    
     if result.success:
         print(f'✅ Command test: {result.stdout.strip()}')
         print(f'   Execution time: {result.execution_time:.3f}s')
+        if result.execution_time > 5:
+            print('⚠️  Command took longer than expected but completed')
+        else:
+            print('✅ Command completed quickly - timeout fix working!')
     else:
         print(f'❌ Command failed: {result.error}')
+        print(f'   This might indicate the timeout issue persists')
+        
 except Exception as e:
     print(f'❌ Command test failed: {e}')
+    import traceback
+    traceback.print_exc()
 "
 
+# Test the launcher quickly
 echo ""
-echo "🎉 Quick Setup Complete!"
-echo "======================="
+echo "🧪 Testing launcher (with timeout protection)..."
+
+timeout 15s ./claude-shell-cygwin exec "echo Launcher test - timeout fix" 2>/dev/null
+
+launcher_exit=$?
+
+if [ $launcher_exit -eq 0 ]; then
+    echo "✅ Launcher test passed"
+elif [ $launcher_exit -eq 124 ]; then
+    echo "⚠️  Launcher timed out - may need further investigation"
+else
+    echo "⚠️  Launcher completed with exit code: $launcher_exit"
+fi
+
+echo ""
+echo "🎉 Quick Setup Complete - With Timeout Fix!"
+echo "==========================================="
 echo ""
 echo "✅ No pip hanging issues!"
 echo "✅ Package ready to use"
+echo "✅ Timeout fix applied"
+echo ""
+echo "Key improvements:"
+echo "  • Shell-specific argument handling"
+echo "  • Better environment setup"
+echo "  • Process cleanup improvements"
+echo "  • Stdin closure to prevent hanging"
 echo ""
 echo "Usage:"
 echo "  ./claude-shell-cygwin test        # Test connectivity"
-echo "  ./claude-shell-cygwin exec \"pwd\"   # Execute command"
+echo "  ./claude-shell-cygwin exec \"pwd\"   # Execute command (should be fast)"
 echo ""
 echo "Python usage:"
 echo "  export PYTHONPATH=\$(pwd)/src:\$PYTHONPATH"
 echo "  python -c \"from claude_shell_connector import run_command; print(run_command('echo test').stdout)\""
 echo ""
-echo "Add to ~/.bashrc for permanent setup:"
-echo "  export PYTHONPATH=$HOME/my-repos/claude-cygwin/src:\$PYTHONPATH"
-echo "  export PYTHONIOENCODING=utf-8"
-echo "  export CYGWIN=nodosfilewarning"
+echo "If commands still timeout, run: ./test_timeout_fix.sh"
