@@ -1,0 +1,33 @@
+Script started on 2025-08-20 06:38:41-04:00 [COMMAND="set -x && ./install_fixed.sh" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
++ ./install_fixed.sh
+🔧 Installing Claude Shell Connector for Cygwin...
+🧹 Cleaning previous builds...
+🗑️ Clearing pip cache...
+Files removed: 1282 (225.5 MB)
+📦 Installing with Cygwin-compatible dependencies...
+Requirement already satisfied: pydantic<2.0.0,>=1.10.0 in /usr/local/lib/python3.9/site-packages (1.10.21)
+Requirement already satisfied: click>=8.0.0 in /usr/local/lib/python3.9/site-packages (8.1.7)
+Requirement already satisfied: rich>=13.0.0 in /home/phdyex/.local/lib/python3.9/site-packages (13.9.2)
+Requirement already satisfied: typing-extensions>=4.0.0 in /home/phdyex/.local/lib/python3.9/site-packages (4.12.2)
+Requirement already satisfied: markdown-it-py>=2.2.0 in /home/phdyex/.local/lib/python3.9/site-packages (from rich>=13.0.0) (3.0.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /home/phdyex/.local/lib/python3.9/site-packages (from rich>=13.0.0) (2.18.0)
+Requirement already satisfied: mdurl~=0.1 in /home/phdyex/.local/lib/python3.9/site-packages (from markdown-it-py>=2.2.0->rich>=13.0.0) (0.1.2)
+⚡ Installing claude-shell-connector...
+Processing /home/phdyex/my-repos/claude-cygwin
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Building wheels for collected packages: claude-shell-connector
+  Building wheel for claude-shell-connector (pyproject.toml) ... done
+  Created wheel for claude-shell-connector: filename=claude_shell_connector-1.0.0-py3-none-any.whl size=16720 sha256=ab2809cfd63c52f7f28a0e0eebd54c719a95793613e89d026a02b48714d74643
+  Stored in directory: /home/phdyex/.cache/pip/wheels/75/69/d8/1e46adce0e6af10d1dc30f2909e1a9cb88b53dd565aa34dcc5
+Successfully built claude-shell-connector
+Installing collected packages: claude-shell-connector
+Successfully installed claude-shell-connector-1.0.0
+✅ Installation completed!
+🧪 Testing installation...
+claude-shell, version 1.0.0
+🎉 Claude Shell Connector is ready!
+📖 Run 'claude-shell --help' for usage information
+Script done on 2025-08-20 06:38:52-04:00 [COMMAND_EXIT_CODE="0"]
+
