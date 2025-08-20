@@ -1,33 +1,76 @@
-Script started on 2025-08-20 06:38:41-04:00 [COMMAND="set -x && ./install_fixed.sh" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
-+ ./install_fixed.sh
-🔧 Installing Claude Shell Connector for Cygwin...
-🧹 Cleaning previous builds...
-🗑️ Clearing pip cache...
-Files removed: 1282 (225.5 MB)
-📦 Installing with Cygwin-compatible dependencies...
+Script started on 2025-08-20 07:14:13-04:00 [COMMAND="set -x && ./install.sh" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
++ ./install.sh
+===============================================================================
+🚀 Claude Shell Connector - Unified Installation
+===============================================================================
+[INFO] Cleaning up previous builds and installations...
+Found existing installation: claude-shell-connector 1.0.0
+Uninstalling claude-shell-connector-1.0.0:
+  Successfully uninstalled claude-shell-connector-1.0.0
+Files removed: 13 (1.5 MB)
+[SUCCESS] Cleanup completed
+[INFO] Installing Cygwin-compatible dependencies...
 Requirement already satisfied: pydantic<2.0.0,>=1.10.0 in /usr/local/lib/python3.9/site-packages (1.10.21)
+Requirement already satisfied: typing-extensions>=4.2.0 in /home/phdyex/.local/lib/python3.9/site-packages (from pydantic<2.0.0,>=1.10.0) (4.12.2)
 Requirement already satisfied: click>=8.0.0 in /usr/local/lib/python3.9/site-packages (8.1.7)
 Requirement already satisfied: rich>=13.0.0 in /home/phdyex/.local/lib/python3.9/site-packages (13.9.2)
 Requirement already satisfied: typing-extensions>=4.0.0 in /home/phdyex/.local/lib/python3.9/site-packages (4.12.2)
 Requirement already satisfied: markdown-it-py>=2.2.0 in /home/phdyex/.local/lib/python3.9/site-packages (from rich>=13.0.0) (3.0.0)
 Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /home/phdyex/.local/lib/python3.9/site-packages (from rich>=13.0.0) (2.18.0)
 Requirement already satisfied: mdurl~=0.1 in /home/phdyex/.local/lib/python3.9/site-packages (from markdown-it-py>=2.2.0->rich>=13.0.0) (0.1.2)
-⚡ Installing claude-shell-connector...
+[SUCCESS] Dependencies installed
+[INFO] Installing claude-shell-connector...
 Processing /home/phdyex/my-repos/claude-cygwin
   Installing build dependencies ... done
   Getting requirements to build wheel ... done
   Preparing metadata (pyproject.toml) ... done
 Building wheels for collected packages: claude-shell-connector
   Building wheel for claude-shell-connector (pyproject.toml) ... done
-  Created wheel for claude-shell-connector: filename=claude_shell_connector-1.0.0-py3-none-any.whl size=16720 sha256=ab2809cfd63c52f7f28a0e0eebd54c719a95793613e89d026a02b48714d74643
+  Created wheel for claude-shell-connector: filename=claude_shell_connector-1.0.0-py3-none-any.whl size=16804 sha256=e72017f605d17467f2096c9f67fbbf9319db22c46d2d75917295ffa46b12620d
   Stored in directory: /home/phdyex/.cache/pip/wheels/75/69/d8/1e46adce0e6af10d1dc30f2909e1a9cb88b53dd565aa34dcc5
 Successfully built claude-shell-connector
 Installing collected packages: claude-shell-connector
 Successfully installed claude-shell-connector-1.0.0
-✅ Installation completed!
-🧪 Testing installation...
-claude-shell, version 1.0.0
-🎉 Claude Shell Connector is ready!
-📖 Run 'claude-shell --help' for usage information
-Script done on 2025-08-20 06:38:52-04:00 [COMMAND_EXIT_CODE="0"]
+[SUCCESS] Package installed
+[INFO] Testing installation...
+Import successful
+[SUCCESS] Python module import test passed
+[SUCCESS] CLI test passed
+[INFO] Testing shell connectivity...
+🧪 Testing shell connectivity...
+✅ Shell found at: /bin/alt-bash
+Watchdog not available, using polling file watcher
+Testing: echo 'Hello from Claude Shell Connector!'
+Command acc0fdbe-eeac-4fa5-ab7b-fc101e5d478a failed: I/O operation on closed file.
+❌ Failed: I/O operation on closed file.
+Testing: pwd
+Command 026e4f01-67ad-499b-84ca-d456bcda52ea failed: I/O operation on closed file.
+❌ Failed: I/O operation on closed file.
+Testing: whoami
+Command 01d87793-0935-4d7d-9c46-6a01187dfa2d failed: I/O operation on closed file.
+❌ Failed: I/O operation on closed file.
+Command bfa1d389-f315-459e-9e5a-268941802612 failed: I/O operation on closed file.
+Error processing command file: Object of type datetime is not JSON serializable
+🎉 Testing completed!
+[SUCCESS] Shell connectivity test passed
+[INFO] Creating work directory...
+[SUCCESS] Work directory created: /home/phdyex/claude_connector
+[INFO] Configuring Claude Desktop...
+[INFO] Backed up existing configuration
+[SUCCESS] Claude Desktop configuration updated
+[INFO] Verifying complete installation...
+[SUCCESS] Installation verification passed
+===============================================================================
+[SUCCESS] 🎉 Installation completed successfully!
+===============================================================================
+📋 Next steps:
+   1. Close Claude Desktop completely
+   2. Restart Claude Desktop
+   3. Test by asking Claude to run shell commands
+🧪 Manual testing:
+   claude-shell test
+   claude-shell exec "pwd"
+📁 Work directory: /home/phdyex/claude_connector
+⚙️  Configuration: /c/Users/phdyex/AppData/Roaming/Claude/config.json
+Script done on 2025-08-20 07:14:30-04:00 [COMMAND_EXIT_CODE="0"]
 
