@@ -1,0 +1,36 @@
+Script started on 2025-08-20 11:59:40-04:00 [COMMAND="set -x && python3.12 -m pip install '.[monitoring]'" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
++ python3.12 -m pip install '.[monitoring]'
+Processing /home/phdyex/my-repos/claude-cygwin
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting click>=8.0.0 (from claude-shell-connector==1.0.0)
+  Using cached click-8.2.1-py3-none-any.whl.metadata (2.5 kB)
+Collecting pydantic<2.0.0,>=1.10.0 (from claude-shell-connector==1.0.0)
+  Using cached pydantic-1.10.22-py3-none-any.whl.metadata (154 kB)
+Collecting rich>=13.0.0 (from claude-shell-connector==1.0.0)
+  Using cached rich-14.1.0-py3-none-any.whl.metadata (18 kB)
+Collecting mcp>=0.1.0 (from claude-shell-connector==1.0.0)
+  Using cached mcp-1.13.0-py3-none-any.whl.metadata (68 kB)
+Collecting psutil>=5.9.0 (from claude-shell-connector==1.0.0)
+  Using cached psutil-7.0.0.tar.gz (497 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... error
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build wheel did not run successfully.
+  │ exit code: 1
+  ╰─> [1 lines of output]
+      platform cygwin is not supported
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+[notice] A new release of pip is available: 25.0.1 -> 25.2
+[notice] To update, run: python3.12 -m pip install --upgrade pip
+error: subprocess-exited-with-error
+× Getting requirements to build wheel did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+note: This error originates from a subprocess, and is likely not a problem with pip.
+Script done on 2025-08-20 11:59:56-04:00 [COMMAND_EXIT_CODE="1"]
+
