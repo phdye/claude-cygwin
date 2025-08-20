@@ -1,0 +1,23 @@
+Script started on 2025-08-19 21:41:40-04:00 [COMMAND="set -x && ./tryit.sh" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
++ ./tryit.sh
+🐧 Claude Shell Connector - Cygwin Setup
+========================================
+Claude Shell Connector - Cygwin Setup
+==================================================
+Platform detected: cygwin
+🐧 Cygwin environment detected
+Using Cygwin-compatible installation method...
+🔧 Installing Claude Shell Connector...
+Running: pip install -e .
+❌ Setup interrupted by user
+🧪 Testing with launcher script...
+Launcher not found, testing with Python path:
+Fatal Python error: init_sys_streams: can't initialize sys standard streams
+Python runtime state: core initialized
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/encodings/latin_1.py", line 20, in <module>
+    class IncrementalEncoder(codecs.IncrementalEncoder):
+KeyboardInterrupt
+🎉 Cygwin setup and test completed!
+Script done on 2025-08-19 21:41:44-04:00 [COMMAND_EXIT_CODE="0"]
+

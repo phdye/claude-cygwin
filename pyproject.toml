@@ -1,0 +1,131 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "claude-shell-connector"
+version = "1.0.0"
+description = "Bridge between Claude Desktop and shell environments for seamless command execution"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+maintainers = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+keywords = [
+    "claude", "shell", "connector", "automation", "cygwin", 
+    "command-execution", "ai-tools", "development-tools"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Shells",
+    "Topic :: Utilities",
+    "Environment :: Console",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "click>=8.0.0",
+    "pydantic>=2.0.0",
+    "rich>=13.0.0",
+    "typing-extensions>=4.0.0; python_version<'3.10'",
+    # Cygwin-compatible file watching
+    "watchdog>=3.0.0; sys_platform != 'cygwin'",
+    # Cygwin-compatible process utilities 
+    "psutil>=5.9.0; sys_platform != 'cygwin'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "tox>=4.0.0",
+    "sphinx>=6.0.0",
+    "sphinx-rtd-theme>=1.2.0",
+    "myst-parser>=1.0.0",
+]
+docs = [
+    "sphinx>=6.0.0",
+    "sphinx-rtd-theme>=1.2.0",
+    "myst-parser>=1.0.0",
+    "sphinx-click>=4.4.0",
+    "sphinx-autodoc-typehints>=1.23.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-asyncio>=0.21.0",
+    "coverage[toml]>=7.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/claude-shell-connector"
+Documentation = "https://claude-shell-connector.readthedocs.io"
+Repository = "https://github.com/yourusername/claude-shell-connector.git"
+"Bug Tracker" = "https://github.com/yourusername/claude-shell-connector/issues"
+Changelog = "https://github.com/yourusername/claude-shell-connector/blob/main/CHANGELOG.md"
+
+[project.scripts]
+claude-shell = "claude_shell_connector.cli.main:main"
+csc = "claude_shell_connector.cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+claude_shell_connector = ["py.typed", "config/*.yaml", "templates/*.json"]
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+
+# isort configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["claude_shell_connector"]
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=claude_shell_connector",
+    "--cov-report=term-missing",
+]
+testpaths = ["tests"]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+branch = true
