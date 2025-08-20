@@ -1,0 +1,9 @@
+Script started on 2025-08-20 06:49:02-04:00 [COMMAND="set -x && claude-shell test" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
++ claude-shell test
+🧪 Testing shell connectivity...
+✅ Shell found at: /bin/alt-bash
+Watchdog not available, using polling file watcher
+Testing: echo 'Hello from Claude Shell Connector!'
+❌ Test failed: Connector is not running
+Script done on 2025-08-20 06:49:02-04:00 [COMMAND_EXIT_CODE="0"]
+
