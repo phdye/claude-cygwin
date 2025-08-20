@@ -1,0 +1,51 @@
+Script started on 2025-08-20 07:56:21-04:00 [COMMAND="set -x && bash diag/test_mcp_startup.sh" TERM="screen.xterm-256color" TTY="/dev/pty3" COLUMNS="121" LINES="40"]
++ bash diag/test_mcp_startup.sh
+🧪 Testing MCP Server Startup
+==============================
+Testing: python3 -m claude_shell_connector.cli.main start
+Command line arguments:
+  --work-dir /home/phdyex/claude_connector
+  --shell-path /bin/bash
+Starting MCP server (will run for 5 seconds)...
+Process ID: 2766
+Watchdog not available, using polling file watcher
+🚀 Starting connector...
+✅ Connector started!
+📁 Work directory: /home/phdyex/claude_connector
+🐚 Shell: /bin/bash
+⏱️ Default timeout: 30s
+💡 Press Ctrl+C to stop
+✅ MCP Server is running (PID: 2766)
+✅ Status file created
+Status contents:
+{
+  "status": "ready",
+  "message": "Connector started",
+  "timestamp": "2025-08-20T07:56:22.317150",
+  "work_dir": "/home/phdyex/claude_connector",
+  "shell_path": "/bin/bash",
+  "shell_type": "bash",
+  "shell_args": [
+    "-c"
+  ],
+  "commands_executed": 0,
+  "uptime": 0.000556,
+  "watchdog_available": false
+}✅ Server stopped cleanly after timeout
+🔍 Work directory contents:
+total 33
+drwxrwxr-x+ 1 phdyex None   0 Aug 20 07:55 .
+drwxr-xr-x+ 1 phdyex None   0 Aug 20 07:49 ..
+-rw-rw-r--+ 1 phdyex None   0 Aug 20 07:09 a
+-rw-rw-r--+ 1 phdyex None   0 Aug 20 07:09 b
+-rw-rw-r--+ 1 phdyex None   0 Aug 20 07:09 c
+-rw-rw-r--+ 1 phdyex None 313 Aug 20 07:56 status.json
+🧪 Quick import test:
+✅ Import successful
+Version: 1.0.0
+Module location: /usr/local/lib/python3.9/site-packages/claude_shell_connector/__init__.py
+🔧 Testing direct command execution:
+Success: True
+Output: Direct execution test
+Script done on 2025-08-20 07:56:27-04:00 [COMMAND_EXIT_CODE="0"]
+
