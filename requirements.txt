@@ -1,5 +1,5 @@
 click>=8.0.0
-pydantic>=2.0.0
+pydantic>=1.10,<2.0
 rich>=13.0.0
 typing-extensions>=4.0.0; python_version<"3.10"
 # Note: watchdog and psutil have issues on Cygwin
